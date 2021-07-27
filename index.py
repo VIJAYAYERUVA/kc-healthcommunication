@@ -17,7 +17,8 @@ app.layout = html.Div([
     html.Div(id='page-content',
              children=[])
 ],
-    style={'font-family': 'Rockwell'})
+    style={'font-family': 'Rockwell',
+           })
 
 
 @app.callback(Output('page-content', 'children'),

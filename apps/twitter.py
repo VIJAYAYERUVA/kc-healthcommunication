@@ -7,44 +7,13 @@ import plotly.express as px
 from dash.dependencies import Input, Output
 
 from app import app
+from assets import style_sheet
+
+pd.options.mode.chained_assignment = None
 
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("../datasets").resolve()
-
-# colors
-cities = {
-    'Kansas City,MO': '#264653',
-    'Long Beach,CA': '#2a9d8f',
-    'Omaha,NE': '#f4a261',
-    'Raleigh,NC': '#e76f51'
-}
-sentiment = {
-    'positive': '#7197cf',
-    'negative': '#e76d59',
-    'neutral': '#c7cdd5'
-}
-emotions = {
-    'anger': '#ff6700',
-    'joy': '#ffd400',
-    'optimism': '#820263',
-    'sadness': '#004e98'
-}
-topics = {'Topic 1': '#4573a7',
-          'Topic 2': '#aa4644',
-          'Topic 3': '#89a54e',
-          'Topic 4': '#71588f'
-          }
-
-# labels
-labels = {
-    "city": "City, State",
-    'VADER_Sentiment': 'VADER Sentiment',
-    "NoOfTweets": "#Tweets",
-    'positive': 'Positive',
-    'negative': 'Negative',
-    'neutral': 'Neutral'
-}
 
 # ---------- Import and clean data (importing csv into pandas)
 data = pd.read_csv(DATA_PATH.joinpath("Tweets.csv"))
@@ -57,9 +26,9 @@ layout = html.Div([
         html.Div([
             html.Label('Select year to check number of tweets'),
             dcc.Dropdown(id="slct_year1",
-                         options=[{'label': year, 'value': year} for year in ['Both', 2020, 2021]],
+                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
                          multi=False,
-                         value='Both',
+                         value='2020 & 2021',
                          style={'width': "100%"}
                          ),
             html.Div(id='output_container1', children=[])
@@ -80,9 +49,9 @@ layout = html.Div([
         html.Div([
             html.Label('Select year to check VADER Sentiment in tweets'),
             dcc.Dropdown(id="slct_year2",
-                         options=[{'label': year, 'value': year} for year in ['Both', 2020, 2021]],
+                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
                          multi=False,
-                         value='Both',
+                         value='2020 & 2021',
                          style={'width': "100%"}
                          ),
             html.Div(id='output_container2', children=[])
@@ -106,9 +75,9 @@ layout = html.Div([
         html.Div([
             html.Label('Select year to check BERT Emotion in tweets'),
             dcc.Dropdown(id="slct_year3",
-                         options=[{'label': year, 'value': year} for year in ['Both', 2020, 2021]],
+                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
                          multi=False,
-                         value='Both',
+                         value='2020 & 2021',
                          style={'width': "100%"}
                          ),
             html.Div(id='output_container3', children=[])
@@ -130,9 +99,9 @@ layout = html.Div([
         html.Div([
             html.Label('Select year to check Topics in tweets'),
             dcc.Dropdown(id="slct_year4",
-                         options=[{'label': year, 'value': year} for year in ['Both', 2020, 2021]],
+                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
                          multi=False,
-                         value='Both',
+                         value='2020 & 2021',
                          style={'width': "100%"}
                          ),
             html.Div(id='output_container4', children=[])
@@ -157,9 +126,9 @@ layout = html.Div([
             html.Div([
                 html.Label('Select Year'),
                 dcc.Dropdown(id="slct_year5",
-                             options=[{'label': y, 'value': y} for y in [2020, 2021]],
+                             options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
                              multi=False,
-                             value=2020,
+                             value='2020 & 2021',
                              style={'width': "100%"}
                              ),
                 html.Div(id='output_container5', children=[])
@@ -168,7 +137,7 @@ layout = html.Div([
 
             html.Div([
                 html.Label('Select City'),
-                dcc.Dropdown(id="slct_city",
+                dcc.Dropdown(id="slct_city1",
                              options=[{'label': c, 'value': c} for c in sorted(city_list)],
                              multi=False,
                              value='Kansas City,MO',
@@ -187,6 +156,50 @@ layout = html.Div([
 
         html.Div([
             dcc.Graph(id='tweets_count_month', figure={}),
+        ])
+    ],
+        style={
+            'backgroundColor': 'rgb(250, 250, 250)',
+            'padding': '10px 5px',
+            'font_family': 'Rockwell'
+        }
+    ),
+    html.Div([
+        html.Div([
+
+            html.Div([
+                html.Label('Select Year'),
+                dcc.Dropdown(id="slct_year6",
+                             options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
+                             multi=False,
+                             value='2020 & 2021',
+                             style={'width': "100%"}
+                             ),
+                html.Div(id='output_container7', children=[])
+            ],
+                style={'width': '49%', 'display': 'inline-block'}),
+
+            html.Div([
+                html.Label('Select City'),
+                dcc.Dropdown(id="slct_city2",
+                             options=[{'label': c, 'value': c} for c in sorted(city_list)],
+                             multi=False,
+                             value='Kansas City,MO',
+                             style={'width': "100%"}
+                             ),
+                html.Div(id='output_container8', children=[])
+            ],
+                style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
+        ],
+            style={
+                'borderBottom': 'thin lightgrey solid',
+                'backgroundColor': 'rgb(250, 250, 250)',
+                'padding': '10px 5px',
+                'font_family': 'Rockwell'
+            }),
+
+        html.Div([
+            dcc.Graph(id='tweets_emotion_month', figure={}),
         ])
     ],
         style={
@@ -220,7 +233,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
     print('Selected Year', slct_year1)
     container1 = "The year chosen by user was: {}".format(slct_year1)
 
-    if slct_year1 == 'Both':
+    if slct_year1 == '2020 & 2021':
         df1 = (count.groupby(['city']).size()).reset_index()
         df1.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
@@ -229,13 +242,13 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       x="city",
                       y="NoOfTweets",
                       color='city',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=cities,
+                      color_discrete_map=style_sheet.cities,
                       text=df1['NoOfTweets']
                       )
 
@@ -243,22 +256,9 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig1.update_layout(
             title='<b>#Tweets from high minority population cities</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='City, State',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
-
         )
+        fig1.update_layout(style_sheet.update_layout2)
     else:
         df1 = count[count['Year'] == slct_year1]
         df1 = (df1.groupby(['Year', 'city']).size()).reset_index()
@@ -269,13 +269,13 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       x="city",
                       y="NoOfTweets",
                       color='city',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=cities,
+                      color_discrete_map=style_sheet.cities,
                       text=df1['NoOfTweets']
                       )
 
@@ -283,28 +283,16 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig1.update_layout(
             title='<b>#Tweets from high minority population cities in ' + str(slct_year1) + ' </b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='City, State',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig1.update_layout(style_sheet.update_layout2)
 
     senti = data.copy()
 
     print('Selected Year', slct_year2)
     container2 = "The year chosen by user was: {}".format(slct_year2)
 
-    if slct_year2 == 'Both':
+    if slct_year2 == '2020 & 2021':
         df2 = (senti.groupby(['city', 'VADER_Sentiment']).size()).reset_index()
         df2.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
@@ -313,16 +301,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       y="NoOfTweets",
                       color="VADER_Sentiment",
                       # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=sentiment,
-                      category_orders={
-                          "VADER_Sentiment": ["positive", 'neutral', "negative"]
-                      },
+                      color_discrete_map=style_sheet.sentiment,
+                      category_orders=style_sheet.sentiment_order,
                       text=df2['NoOfTweets'],
                       )
 
@@ -330,21 +316,9 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig2.update_layout(
             title='<b>#Tweets from high minority population cities with VADER Sentiment</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='VADER Sentiment',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig2.update_layout(style_sheet.update_layout2)
 
     else:
         df2 = senti[senti['Year'] == slct_year2]
@@ -355,17 +329,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       x="city",
                       y="NoOfTweets",
                       color="VADER_Sentiment",
-                      # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=sentiment,
-                      category_orders={
-                          "VADER_Sentiment": ["positive", 'neutral', "negative"]
-                      },
+                      color_discrete_map=style_sheet.sentiment,
+                      category_orders=style_sheet.sentiment_order,
                       text=df2['NoOfTweets'],
                       )
 
@@ -373,28 +344,16 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig2.update_layout(
             title='<b>#Tweets from high minority population cities in ' + str(slct_year2) + ' with VADER Sentiment</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='VADER Sentiment',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig2.update_layout(style_sheet.update_layout2)
 
     emotion = data.copy()
 
     print('Selected Year', slct_year3)
     container3 = "The year chosen by user was: {}".format(slct_year3)
 
-    if slct_year3 == 'Both':
+    if slct_year3 == '2020 & 2021':
         df3 = (emotion.groupby(['city', 'BERT_Emotion']).size()).reset_index()
         df3.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
@@ -403,16 +362,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       y="NoOfTweets",
                       color="BERT_Emotion",
                       # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=emotions,
-                      category_orders={
-                          "BERT_Emotion": ["anger", 'joy', 'optimism', 'sadness']
-                      },
+                      color_discrete_map=style_sheet.emotions,
+                      category_orders=style_sheet.emotions_order,
                       text=df3['NoOfTweets'],
                       )
 
@@ -420,21 +377,9 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig3.update_layout(
             title='<b>#Tweets from high minority population cities with BERT Emotion</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='BERT Emotion',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig3.update_layout(style_sheet.update_layout2)
 
     else:
         df3 = emotion[emotion['Year'] == slct_year3]
@@ -445,17 +390,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       x="city",
                       y="NoOfTweets",
                       color="BERT_Emotion",
-                      # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=emotions,
-                      category_orders={
-                          "BERT_Emotion": ["anger", 'joy', 'optimism', 'sadness']
-                      },
+                      color_discrete_map=style_sheet.emotions,
+                      category_orders=style_sheet.emotions_order,
                       text=df3['NoOfTweets'],
                       )
 
@@ -463,28 +405,16 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig3.update_layout(
             title='<b>#Tweets from high minority population cities in ' + str(slct_year3) + ' with BERT Emotion</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='BERT Emotion',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig3.update_layout(style_sheet.update_layout2)
 
     topic = data.copy()
 
     print('Selected Year', slct_year4)
     container4 = "The year chosen by user was: {}".format(slct_year4)
 
-    if slct_year4 == 'Both':
+    if slct_year4 == '2020 & 2021':
         df4 = (topic.groupby(['city', 'Dominant_Topic']).size()).reset_index()
         df4.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
@@ -492,17 +422,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       x="city",
                       y="NoOfTweets",
                       color="Dominant_Topic",
-                      # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=sentiment,
-                      category_orders={
-                          "Dominant_Topic": ["Topic 1", 'Topic 2', "Topic 3", 'Topic 4']
-                      },
+                      color_discrete_map=style_sheet.sentiment,
+                      category_orders=style_sheet.topic_order,
                       text=df4['NoOfTweets'],
                       )
 
@@ -510,21 +437,9 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig4.update_layout(
             title='<b>#Tweets from high minority population cities with Dominant Topic</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='Dominant Topic',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig4.update_layout(style_sheet.update_layout2)
 
     else:
         df4 = topic[topic['Year'] == slct_year4]
@@ -536,16 +451,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                       y="NoOfTweets",
                       color="Dominant_Topic",
                       # barmode='group',
-                      labels=labels,
+                      labels=style_sheet.labels,
                       hover_name='city',
                       hover_data={
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=sentiment,
-                      category_orders={
-                          "Dominant_Topic": ["Topic 1", 'Topic 2', "Topic 3", 'Topic 4']
-                      },
+                      color_discrete_map=style_sheet.sentiment,
+                      category_orders=style_sheet.topic_order,
                       text=df4['NoOfTweets'],
                       )
 
@@ -554,21 +467,9 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig4.update_layout(
             title='<b>#Tweets from high minority population cities in ' + str(
                 slct_year4) + ' with Dominant Topic</b>',
-            title_x=0.5,
-            font_size=13,
-            font_family='Rockwell',
-            margin=dict(l=0, r=0, b=0),
-            hoverlabel=dict(
-                # bgcolor="white",
-                font_size=16,
-                font_family="Rockwell"),
             legend_title_text='Dominant Topic',
-            autotypenumbers="strict",
-            hoverlabel_align='right',
-            legend=dict(
-                orientation="h",
-            )
         )
+        fig4.update_layout(style_sheet.update_layout2)
 
     return container1, fig1, container2, fig2, container3, fig3, container4, fig4
 
@@ -578,47 +479,130 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
      Output(component_id='output_container6', component_property='children'),
      Output(component_id='tweets_count_month', component_property='figure')],
     [Input(component_id='slct_year5', component_property='value'),
-     Input(component_id='slct_city', component_property='value')]
+     Input(component_id='slct_city1', component_property='value')]
 )
-def update_graph_2(slct_year5, slct_city):
+def update_graph_2(slct_year5, slct_city1):
     dff1 = data.copy()
     print('Selected Year', slct_year5)
     container5 = "The year chosen by user was: {}".format(slct_year5)
 
-    print('Selected City', slct_city)
-    container6 = "The year chosen by user was: {}".format(slct_city)
+    print('Selected City', slct_city1)
+    container6 = "The year chosen by user was: {}".format(slct_city1)
+    if slct_year5 == '2020 & 2021':
+        df5 = dff1[dff1['city'] == slct_city1]
+        df5['Time'] = df5['Month'].map(str) + '/' + df5['Year'].map(str)
+        df5['Time'] = pd.to_datetime(df5['Time'])
+        df5 = (df5.groupby(['Time']).size()).reset_index()
+        df5.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
-    df5 = dff1[(dff1['Year'] == slct_year5) & (dff1['city'] == slct_city)]
-    df5 = (df5.groupby(['Year', 'Month']).size()).reset_index()
-    df5.rename(columns={0: 'NoOfTweets'}, inplace=True)
+        fig5 = px.bar(df5,
+                      x="Time",
+                      y="NoOfTweets",
+                      labels=style_sheet.labels,
+                      hover_data={
+                          "Time": False,
+                      },
+                      text=df5['NoOfTweets']
+                      )
+        fig5.update_xaxes(dtick="M1",
+                          )
+        fig5.update_layout(
+            title='<b>#Tweets from ' + slct_city1 + ' in ' + str(slct_year5) + '</b>',
+            hoverlabel_align='right',
+            xaxis=dict(tickmode='linear')
+        )
+        fig5.update_layout(style_sheet.update_layout1)
 
-    fig5 = px.bar(df5,
-                  x="Month",
-                  y="NoOfTweets",
-                  color="NoOfTweets",
-                  labels=labels,
-                  hover_name='Month',
-                  hover_data={
-                      "Month": False,
-                  },
-                  color_continuous_scale='Burg',
-                  text=df5['NoOfTweets']
-                  )
+    else:
+        df5 = dff1[(dff1['Year'] == slct_year5) & (dff1['city'] == slct_city1)]
+        df5 = (df5.groupby(['Year', 'Month']).size()).reset_index()
+        df5.rename(columns={0: 'NoOfTweets'}, inplace=True)
 
-    fig5.update_layout(
-        title='<b>#Tweets from ' + slct_city + ' in ' + str(slct_year5) + '</b>',
-        title_x=0.5,
-        font_size=13,
-        font_family='Rockwell',
-        margin=dict(l=0, r=0, b=0),
-        hoverlabel=dict(
-            # bgcolor="white",
-            font_size=16,
-            font_family="Rockwell"),
-        legend_title_text='#Tweets',
-        autotypenumbers="strict",
-        hoverlabel_align='right',
-        xaxis=dict(tickmode='linear')
-    )
+        fig5 = px.bar(df5,
+                      x="Month",
+                      y="NoOfTweets",
+                      labels=style_sheet.labels,
+                      hover_name='Month',
+                      hover_data={
+                          "Month": False,
+                      },
+                      text=df5['NoOfTweets']
+                      )
+        fig5.update_layout(
+            title='<b>#Tweets from ' + slct_city1 + ' in ' + str(slct_year5) + '</b>',
+            hoverlabel_align='right',
+            xaxis=dict(tickmode='linear')
+        )
+        fig5.update_layout(style_sheet.update_layout1)
 
     return container5, container6, fig5
+
+
+@app.callback(
+    [Output(component_id='output_container7', component_property='children'),
+     Output(component_id='output_container8', component_property='children'),
+     Output(component_id='tweets_emotion_month', component_property='figure')],
+    [Input(component_id='slct_year6', component_property='value'),
+     Input(component_id='slct_city2', component_property='value')]
+)
+def update_graph_3(slct_year6, slct_city2):
+    dff1 = data.copy()
+    print('Selected Year', slct_year6)
+    container7 = "The year chosen by user was: {}".format(slct_year6)
+
+    print('Selected City', slct_city2)
+    container8 = "The year chosen by user was: {}".format(slct_city2)
+    if slct_year6 == '2020 & 2021':
+        df5 = dff1[dff1['city'] == slct_city2]
+        df5['Time'] = df5['Month'].map(str) + '/' + df5['Year'].map(str)
+        df5['Time'] = pd.to_datetime(df5['Time'])
+        df5 = (df5.groupby(['Time', 'BERT_Emotion']).size()).reset_index()
+        df5.rename(columns={0: 'NoOfTweets'}, inplace=True)
+
+        fig6 = px.bar(df5,
+                      x="Time",
+                      y="NoOfTweets",
+                      color='BERT_Emotion',
+                      color_discrete_map=style_sheet.emotions,
+                      labels=style_sheet.labels,
+                      hover_data={
+                          "Time": False,
+                      },
+                      text=df5['NoOfTweets']
+                      )
+        fig6.update_xaxes(dtick="M1",
+                          )
+        fig6.update_layout(
+            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including BERT Emotions</b>',
+            hoverlabel_align='right',
+            legend_title_text='BERT Emotion',
+            xaxis=dict(tickmode='linear')
+        )
+        fig6.update_layout(style_sheet.update_layout2)
+
+    else:
+        df5 = dff1[(dff1['Year'] == slct_year6) & (dff1['city'] == slct_city2)]
+        df5 = (df5.groupby(['Year', 'Month', 'BERT_Emotion']).size()).reset_index()
+        df5.rename(columns={0: 'NoOfTweets'}, inplace=True)
+
+        fig6 = px.bar(df5,
+                      x="Month",
+                      y="NoOfTweets",
+                      color='BERT_Emotion',
+                      color_discrete_map=style_sheet.emotions,
+                      labels=style_sheet.labels,
+                      hover_name='Month',
+                      hover_data={
+                          "Month": False,
+                      },
+                      text=df5['NoOfTweets']
+                      )
+        fig6.update_layout(
+            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including BERT Emotions</b>',
+            hoverlabel_align='right',
+            legend_title_text='BERT Emotion',
+            xaxis=dict(tickmode='linear')
+        )
+        fig6.update_layout(style_sheet.update_layout1)
+
+    return container7, container8, fig6
