@@ -1,26 +1,29 @@
 # colors
-cities = {
+tweets_color = {
+    'NoOfTweets': '#83c5be'
+}
+cities_color = {
     'Kansas City,MO': '#264653',
     'Long Beach,CA': '#2a9d8f',
     'Omaha,NE': '#f4a261',
     'Raleigh,NC': '#e76f51'
 }
-sentiment = {
-    'positive': '#7197cf',
-    'negative': '#e76d59',
-    'neutral': '#c7cdd5'
+sentiment_color = {
+    'positive': '#2a9d8f',
+    'negative': '#e76f51',
+    'neutral': '#f4a261'
 }
-emotions = {
-    'anger': '#ff6700',
-    'joy': '#ffd400',
-    'optimism': '#820263',
-    'sadness': '#004e98'
+emotions_color = {
+    'anger': '#e76f51',
+    'joy': '#2a9d8f',
+    'optimism': '#f4a261',
+    'sadness': '#264653'
 }
-topics = {'Topic 1': '#4573a7',
-          'Topic 2': '#aa4644',
-          'Topic 3': '#89a54e',
-          'Topic 4': '#71588f'
-          }
+topics_color = {'Topic 1': '#e76f51',
+                'Topic 2': '#2a9d8f',
+                'Topic 3': '#f4a261',
+                'Topic 4': '#264653'
+                }
 
 # labels
 labels = {
@@ -45,10 +48,16 @@ topic_order = {
     "Dominant_Topic": ["Topic 1", 'Topic 2', "Topic 3", 'Topic 4']
 }
 
+# config
+config = {
+    'displayModeBar': False
+}
+
+# layouts
 update_layout1 = dict(
     title_x=0.5,
     font_size=13,
-    font_family='Rockwell',
+    font_family='sans-serif',
     margin=dict(l=0, r=0, b=0),
     hoverlabel=dict(
         font_size=16,
@@ -61,7 +70,7 @@ update_layout1 = dict(
 update_layout2 = dict(
     title_x=0.5,
     font_size=13,
-    font_family='Rockwell',
+    font_family='sans-serif',
     margin=dict(l=0, r=0, b=0),
     hoverlabel=dict(
         font_size=16,

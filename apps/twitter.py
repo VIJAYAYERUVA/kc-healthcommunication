@@ -1,5 +1,6 @@
 import pathlib
 
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
@@ -18,197 +19,164 @@ DATA_PATH = PATH.joinpath("../datasets").resolve()
 # ---------- Import and clean data (importing csv into pandas)
 data = pd.read_csv(DATA_PATH.joinpath("Tweets.csv"))
 
-city_list = data['city'].value_counts().index.tolist()
+city_list = sorted(data['city'].value_counts().index.tolist())
 
-layout = html.Div([
-    html.H1("Twitter Data", style={'text-align': 'center'}),
-    html.Div([
-        html.Div([
-            html.Label('Select year to check number of tweets'),
-            dcc.Dropdown(id="slct_year1",
-                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
-                         multi=False,
-                         value='2020 & 2021',
-                         style={'width': "100%"}
-                         ),
-            html.Div(id='output_container1', children=[])
-        ]),
-        html.Div([
-            dcc.Graph(id='tweets_count', figure={}),
-        ]),
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell',
-            'width': '49%',
-            'display': 'inline-block'
-        }
-    ),
-    html.Div([
-        html.Div([
-            html.Label('Select year to check VADER Sentiment in tweets'),
-            dcc.Dropdown(id="slct_year2",
-                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
-                         multi=False,
-                         value='2020 & 2021',
-                         style={'width': "100%"}
-                         ),
-            html.Div(id='output_container2', children=[])
-        ]),
-
-        html.Div([
-            dcc.Graph(id='tweets_sentiment', figure={}),
-        ])
-
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell',
-            'width': '49%',
-            'float': 'right',
-            'display': 'inline-block'
-        }
-    ),
-    html.Div([
-        html.Div([
-            html.Label('Select year to check BERT Emotion in tweets'),
-            dcc.Dropdown(id="slct_year3",
-                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
-                         multi=False,
-                         value='2020 & 2021',
-                         style={'width': "100%"}
-                         ),
-            html.Div(id='output_container3', children=[])
-        ]),
-
-        html.Div([
-            dcc.Graph(id='tweets_emotion', figure={}),
-        ])
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell',
-            'width': '49%',
-            'display': 'inline-block'
-        }
-    ),
-    html.Div([
-        html.Div([
-            html.Label('Select year to check Topics in tweets'),
-            dcc.Dropdown(id="slct_year4",
-                         options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
-                         multi=False,
-                         value='2020 & 2021',
-                         style={'width': "100%"}
-                         ),
-            html.Div(id='output_container4', children=[])
-        ]),
-
-        html.Div([
-            dcc.Graph(id='tweets_topic', figure={}),
-        ])
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell',
-            'width': '49%',
-            'float': 'right',
-            'display': 'inline-block'
-        }
-    ),
-    html.Div([
-        html.Div([
-
-            html.Div([
-                html.Label('Select Year'),
-                dcc.Dropdown(id="slct_year5",
-                             options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
-                             multi=False,
-                             value='2020 & 2021',
-                             style={'width': "100%"}
-                             ),
-                html.Div(id='output_container5', children=[])
+layout = dbc.Container([
+    dbc.Row(id='title',
+            children=[
+                dbc.Col([
+                    html.H2("Explore the COVID-19 Tweets", className='text-center font-weight-bold ml-4 mr-4 mt-4 mb-4')
+                ],
+                    xs=12, sm=12, md=12, lg=12, xl=12),
             ],
-                style={'width': '49%', 'display': 'inline-block'}),
+            justify='center',
+            align='center',
+            # className='mb-4'
+            ),
+    dbc.Row(id='tweets_row1',
+            children=[
+                dbc.Col([
+                    html.Label('Select year to check number of tweets'),
+                    dcc.Dropdown(id="slct_year1",
+                                 options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
+                                 multi=False,
+                                 value='2020 & 2021',
+                                 style={'width': "100%"}
+                                 ),
+                    html.Div(id='output_container1', children=[]),
+                    dcc.Graph(id='tweets_count', figure={}, config=style_sheet.config),
 
-            html.Div([
-                html.Label('Select City'),
-                dcc.Dropdown(id="slct_city1",
-                             options=[{'label': c, 'value': c} for c in sorted(city_list)],
-                             multi=False,
-                             value='Kansas City,MO',
-                             style={'width': "100%"}
-                             ),
-                html.Div(id='output_container6', children=[])
+                ],
+                    xs=12, sm=12, md=12, lg=6, xl=6),
+                dbc.Col([
+                    html.Label('Select year to check Sentiment in tweets'),
+                    dcc.Dropdown(id="slct_year2",
+                                 options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
+                                 multi=False,
+                                 value='2020 & 2021',
+                                 style={'width': "100%"}
+                                 ),
+                    html.Div(id='output_container2', children=[]),
+                    dcc.Graph(id='tweets_sentiment', figure={}, config=style_sheet.config),
+                ],
+                    xs=12, sm=12, md=12, lg=6, xl=6),
             ],
-                style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
-        ],
-            style={
-                'borderBottom': 'thin lightgrey solid',
-                'backgroundColor': 'rgb(250, 250, 250)',
-                'padding': '10px 5px',
-                'font_family': 'Rockwell'
-            }),
-
-        html.Div([
-            dcc.Graph(id='tweets_count_month', figure={}),
-        ])
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell'
-        }
-    ),
-    html.Div([
-        html.Div([
-
-            html.Div([
-                html.Label('Select Year'),
-                dcc.Dropdown(id="slct_year6",
-                             options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
-                             multi=False,
-                             value='2020 & 2021',
-                             style={'width': "100%"}
-                             ),
-                html.Div(id='output_container7', children=[])
+            justify='center',
+            align='center',
+            className='mb-4'
+            ),
+    dbc.Row(id='tweets_row2',
+            children=[
+                dbc.Col([
+                    html.Label('Select year to check Emotion in tweets'),
+                    dcc.Dropdown(id="slct_year3",
+                                 options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
+                                 multi=False,
+                                 value='2020 & 2021',
+                                 style={'width': "100%"}
+                                 ),
+                    html.Div(id='output_container3', children=[]),
+                    dcc.Graph(id='tweets_emotion', figure={}, config=style_sheet.config),
+                ],
+                    xs=12, sm=12, md=12, lg=6, xl=6),
+                dbc.Col([
+                    html.Label('Select year to check Topics in tweets'),
+                    dcc.Dropdown(id="slct_year4",
+                                 options=[{'label': year, 'value': year} for year in ['2020 & 2021', 2020, 2021]],
+                                 multi=False,
+                                 value='2020 & 2021',
+                                 style={'width': "100%"}
+                                 ),
+                    html.Div(id='output_container4', children=[]),
+                    dcc.Graph(id='tweets_topic', figure={}, config=style_sheet.config),
+                ],
+                    xs=12, sm=12, md=12, lg=6, xl=6),
             ],
-                style={'width': '49%', 'display': 'inline-block'}),
+            justify='center',
+            align='center',
+            className='mb-4'
+            ),
+    dbc.Row(id='tweets_row3',
+            children=[
+                dbc.Col([
+                    html.Div([
 
-            html.Div([
-                html.Label('Select City'),
-                dcc.Dropdown(id="slct_city2",
-                             options=[{'label': c, 'value': c} for c in sorted(city_list)],
-                             multi=False,
-                             value='Kansas City,MO',
-                             style={'width': "100%"}
-                             ),
-                html.Div(id='output_container8', children=[])
+                        html.Div([
+                            html.Label('Select Year'),
+                            dcc.Dropdown(id="slct_year5",
+                                         options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
+                                         multi=False,
+                                         value='2020 & 2021',
+                                         style={'width': "100%"}
+                                         ),
+                            html.Div(id='output_container5', children=[])
+                        ],
+                            style={'width': '49%', 'display': 'inline-block'}),
+
+                        html.Div([
+                            html.Label('Select City'),
+                            dcc.Dropdown(id="slct_city1",
+                                         options=[{'label': c, 'value': c} for c in city_list],
+                                         multi=False,
+                                         value='Kansas City,MO',
+                                         style={'width': "100%"}
+                                         ),
+                            html.Div(id='output_container6', children=[])
+                        ],
+                            style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
+                    ]),
+                    html.Div([
+                        dcc.Graph(id='tweets_count_month', figure={}, config=style_sheet.config),
+                    ]),
+
+                ],
+                    xs=12, sm=12, md=12, lg=12, xl=12),
             ],
-                style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
-        ],
-            style={
-                'borderBottom': 'thin lightgrey solid',
-                'backgroundColor': 'rgb(250, 250, 250)',
-                'padding': '10px 5px',
-                'font_family': 'Rockwell'
-            }),
+            justify='center',
+            align='center',
+            className='mb-4'
+            ),
+    dbc.Row(id='tweets_row4',
+            children=[
+                dbc.Col([
+                    html.Div([
 
-        html.Div([
-            dcc.Graph(id='tweets_emotion_month', figure={}),
-        ])
-    ],
-        style={
-            'backgroundColor': 'rgb(250, 250, 250)',
-            'padding': '10px 5px',
-            'font_family': 'Rockwell'
-        }
-    )
-], style={'font-family': 'Rockwell'})
+                        html.Div([
+                            html.Label('Select Year'),
+                            dcc.Dropdown(id="slct_year6",
+                                         options=[{'label': y, 'value': y} for y in ['2020 & 2021', 2020, 2021]],
+                                         multi=False,
+                                         value='2020 & 2021',
+                                         style={'width': "100%"}
+                                         ),
+                            html.Div(id='output_container7', children=[])
+                        ],
+                            style={'width': '49%', 'display': 'inline-block'}),
+
+                        html.Div([
+                            html.Label('Select City'),
+                            dcc.Dropdown(id="slct_city2",
+                                         options=[{'label': c, 'value': c} for c in city_list],
+                                         multi=False,
+                                         value='Kansas City,MO',
+                                         style={'width': "100%"}
+                                         ),
+                            html.Div(id='output_container8', children=[])
+                        ],
+                            style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
+                    ]),
+                    html.Div([
+                        dcc.Graph(id='tweets_emotion_month', figure={}, config=style_sheet.config),
+                    ]),
+                ],
+                    xs=12, sm=12, md=12, lg=12, xl=12),
+            ],
+            justify='center',
+            align='center',
+            className='mb-4'
+            ),
+],
+    fluid=True)
 
 
 # ------------------------------------------------------------------------------
@@ -230,7 +198,7 @@ layout = html.Div([
 def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
     count = data.copy()
 
-    print('Selected Year', slct_year1)
+    # print('Selected Year', slct_year1)
     container1 = "The year chosen by user was: {}".format(slct_year1)
 
     if slct_year1 == '2020 & 2021':
@@ -248,7 +216,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.cities,
+                      color_discrete_map=style_sheet.cities_color,
                       text=df1['NoOfTweets']
                       )
 
@@ -275,7 +243,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.cities,
+                      color_discrete_map=style_sheet.cities_color,
                       text=df1['NoOfTweets']
                       )
 
@@ -289,7 +257,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
     senti = data.copy()
 
-    print('Selected Year', slct_year2)
+    # print('Selected Year', slct_year2)
     container2 = "The year chosen by user was: {}".format(slct_year2)
 
     if slct_year2 == '2020 & 2021':
@@ -307,7 +275,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.sentiment,
+                      color_discrete_map=style_sheet.sentiment_color,
                       category_orders=style_sheet.sentiment_order,
                       text=df2['NoOfTweets'],
                       )
@@ -315,8 +283,8 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig2.update_xaxes(title_text="")
 
         fig2.update_layout(
-            title='<b>#Tweets from high minority population cities with VADER Sentiment</b>',
-            legend_title_text='VADER Sentiment',
+            title='<b>#Tweets from high minority population cities with Sentiment</b>',
+            legend_title_text='Sentiment',
         )
         fig2.update_layout(style_sheet.update_layout2)
 
@@ -335,7 +303,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.sentiment,
+                      color_discrete_map=style_sheet.sentiment_color,
                       category_orders=style_sheet.sentiment_order,
                       text=df2['NoOfTweets'],
                       )
@@ -343,14 +311,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig2.update_xaxes(title_text="")
 
         fig2.update_layout(
-            title='<b>#Tweets from high minority population cities in ' + str(slct_year2) + ' with VADER Sentiment</b>',
-            legend_title_text='VADER Sentiment',
+            title='<b>#Tweets from high minority population cities in ' + str(slct_year2) + ' with Sentiment</b>',
+            legend_title_text='Sentiment',
         )
         fig2.update_layout(style_sheet.update_layout2)
 
     emotion = data.copy()
 
-    print('Selected Year', slct_year3)
+    # print('Selected Year', slct_year3)
     container3 = "The year chosen by user was: {}".format(slct_year3)
 
     if slct_year3 == '2020 & 2021':
@@ -368,7 +336,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.emotions,
+                      color_discrete_map=style_sheet.emotions_color,
                       category_orders=style_sheet.emotions_order,
                       text=df3['NoOfTweets'],
                       )
@@ -376,8 +344,8 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig3.update_xaxes(title_text="")
 
         fig3.update_layout(
-            title='<b>#Tweets from high minority population cities with BERT Emotion</b>',
-            legend_title_text='BERT Emotion',
+            title='<b>#Tweets from high minority population cities with Emotion</b>',
+            legend_title_text='Emotion',
         )
         fig3.update_layout(style_sheet.update_layout2)
 
@@ -396,7 +364,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.emotions,
+                      color_discrete_map=style_sheet.emotions_color,
                       category_orders=style_sheet.emotions_order,
                       text=df3['NoOfTweets'],
                       )
@@ -404,14 +372,14 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig3.update_xaxes(title_text="")
 
         fig3.update_layout(
-            title='<b>#Tweets from high minority population cities in ' + str(slct_year3) + ' with BERT Emotion</b>',
-            legend_title_text='BERT Emotion',
+            title='<b>#Tweets from high minority population cities in ' + str(slct_year3) + ' with Emotion</b>',
+            legend_title_text='Emotion',
         )
         fig3.update_layout(style_sheet.update_layout2)
 
     topic = data.copy()
 
-    print('Selected Year', slct_year4)
+    # print('Selected Year', slct_year4)
     container4 = "The year chosen by user was: {}".format(slct_year4)
 
     if slct_year4 == '2020 & 2021':
@@ -428,7 +396,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.sentiment,
+                      color_discrete_map=style_sheet.topics_color,
                       category_orders=style_sheet.topic_order,
                       text=df4['NoOfTweets'],
                       )
@@ -437,7 +405,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 
         fig4.update_layout(
             title='<b>#Tweets from high minority population cities with Dominant Topic</b>',
-            legend_title_text='Dominant Topic',
+            legend_title_text='Topic',
         )
         fig4.update_layout(style_sheet.update_layout2)
 
@@ -457,7 +425,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
                           "city": False,
                           "NoOfTweets": True
                       },
-                      color_discrete_map=style_sheet.sentiment,
+                      color_discrete_map=style_sheet.topics_color,
                       category_orders=style_sheet.topic_order,
                       text=df4['NoOfTweets'],
                       )
@@ -467,7 +435,7 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
         fig4.update_layout(
             title='<b>#Tweets from high minority population cities in ' + str(
                 slct_year4) + ' with Dominant Topic</b>',
-            legend_title_text='Dominant Topic',
+            legend_title_text='Topic',
         )
         fig4.update_layout(style_sheet.update_layout2)
 
@@ -483,11 +451,11 @@ def update_graph_1(slct_year1, slct_year2, slct_year3, slct_year4):
 )
 def update_graph_2(slct_year5, slct_city1):
     dff1 = data.copy()
-    print('Selected Year', slct_year5)
+    # print('Selected Year', slct_year5)
     container5 = "The year chosen by user was: {}".format(slct_year5)
 
-    print('Selected City', slct_city1)
-    container6 = "The year chosen by user was: {}".format(slct_city1)
+    # print('Selected City', slct_city1)
+    container6 = "The city chosen by user was: {}".format(slct_city1)
     if slct_year5 == '2020 & 2021':
         df5 = dff1[dff1['city'] == slct_city1]
         df5['Time'] = df5['Month'].map(str) + '/' + df5['Year'].map(str)
@@ -502,6 +470,7 @@ def update_graph_2(slct_year5, slct_city1):
                       hover_data={
                           "Time": False,
                       },
+                      color_discrete_sequence=['#2a9d8f'] * len(df5),
                       text=df5['NoOfTweets']
                       )
         fig5.update_xaxes(dtick="M1",
@@ -526,6 +495,7 @@ def update_graph_2(slct_year5, slct_city1):
                       hover_data={
                           "Month": False,
                       },
+                      color_discrete_sequence=['#2a9d8f'] * len(df5),
                       text=df5['NoOfTweets']
                       )
         fig5.update_layout(
@@ -547,11 +517,11 @@ def update_graph_2(slct_year5, slct_city1):
 )
 def update_graph_3(slct_year6, slct_city2):
     dff1 = data.copy()
-    print('Selected Year', slct_year6)
+    # print('Selected Year', slct_year6)
     container7 = "The year chosen by user was: {}".format(slct_year6)
 
-    print('Selected City', slct_city2)
-    container8 = "The year chosen by user was: {}".format(slct_city2)
+    # print('Selected City', slct_city2)
+    container8 = "The city chosen by user was: {}".format(slct_city2)
     if slct_year6 == '2020 & 2021':
         df5 = dff1[dff1['city'] == slct_city2]
         df5['Time'] = df5['Month'].map(str) + '/' + df5['Year'].map(str)
@@ -563,7 +533,7 @@ def update_graph_3(slct_year6, slct_city2):
                       x="Time",
                       y="NoOfTweets",
                       color='BERT_Emotion',
-                      color_discrete_map=style_sheet.emotions,
+                      color_discrete_map=style_sheet.emotions_color,
                       labels=style_sheet.labels,
                       hover_data={
                           "Time": False,
@@ -573,9 +543,9 @@ def update_graph_3(slct_year6, slct_city2):
         fig6.update_xaxes(dtick="M1",
                           )
         fig6.update_layout(
-            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including BERT Emotions</b>',
+            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including Emotions</b>',
             hoverlabel_align='right',
-            legend_title_text='BERT Emotion',
+            legend_title_text='Emotion',
             xaxis=dict(tickmode='linear')
         )
         fig6.update_layout(style_sheet.update_layout2)
@@ -589,7 +559,7 @@ def update_graph_3(slct_year6, slct_city2):
                       x="Month",
                       y="NoOfTweets",
                       color='BERT_Emotion',
-                      color_discrete_map=style_sheet.emotions,
+                      color_discrete_map=style_sheet.emotions_color,
                       labels=style_sheet.labels,
                       hover_name='Month',
                       hover_data={
@@ -598,9 +568,9 @@ def update_graph_3(slct_year6, slct_city2):
                       text=df5['NoOfTweets']
                       )
         fig6.update_layout(
-            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including BERT Emotions</b>',
+            title='<b>#Tweets from ' + slct_city2 + ' in ' + str(slct_year6) + ' including Emotions</b>',
             hoverlabel_align='right',
-            legend_title_text='BERT Emotion',
+            legend_title_text='Emotion',
             xaxis=dict(tickmode='linear')
         )
         fig6.update_layout(style_sheet.update_layout1)
